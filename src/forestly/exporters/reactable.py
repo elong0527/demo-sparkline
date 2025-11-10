@@ -249,9 +249,9 @@ class ReactableExporter:
             "full_width": True,
             "width": "100%",
             "wrap": False,
-            "theme": Theme(
+            "theme": Theme(  # pyre-ignore[28]: External library type definition issue
                 cell_padding="0px 8px", style={"fontSize": f"{config.font_size}px"}
-            ),  # pyre-ignore[28]: External library type definition issue
+            ),
         }
 
         # Add column groups if any
