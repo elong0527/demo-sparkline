@@ -4,14 +4,39 @@
   ],
   "search_path": [
     {
-      "site-package": "."
-    }
+      "site-package": "polars"
+    },
+    {
+      "site-package": "pydantic"
+    },
+    {
+      "site-package": "plotly"
+    },
+    {
+      "site-package": "reactable"
+    },
+    {
+      "site-package": "pandas"
+    },
+    {
+      "site-package": "jinja2"
+    },
+    {
+      "site-package": "IPython"
+    },
+    {
+      "site-package": "plotnine"
+    },
+    "stubs"
   ],
-  "strict": false,
-  "version": "0.9.25",
+  "strict": true,
   "exclude": [
-    ".*/tests/.*",
-    ".*/venv/.*",
-    ".*/\\.venv/.*"
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "tests",
+    "docs",
+    "planning"
   ]
 }
