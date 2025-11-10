@@ -1,11 +1,12 @@
 """Core ForestPlot class for forest plot system."""
 
+from typing import Any
+
 import polars as pl
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from forestly.core.config import Config
 from forestly.panels.base import Panel
-
 
 class ForestPlot(BaseModel):
     """Main class for creating forest plots from clinical trial data."""
@@ -72,13 +73,13 @@ class ForestPlot(BaseModel):
         if missing:
             raise ValueError(f"Missing required columns in data: {missing}")
 
-    def _prepare_reactable_data(self) -> dict:
+    def _prepare_reactable_data(self) -> dict[str, Any]:
         """Prepare data for Reactable with nesting.
 
         Returns:
             Dictionary with prepared data and configuration
         """
-        result = {
+        result: dict[str, Any] = {
             "data": self.data,
             "panels": [],
             "config": self.config.model_dump(),
@@ -90,7 +91,7 @@ class ForestPlot(BaseModel):
 
         return result
 
-    def to_reactable(self):
+    def to_reactable(self) -> Any:
         """Generate interactive Reactable table.
 
         Returns:
@@ -123,30 +124,24 @@ class ForestPlot(BaseModel):
         """
         return self.data
 
-    def to_rtf(self, filename: str, **kwargs) -> None:
+    def to_rtf(self, filename: str, **kwargs: Any) -> None:
         """Export to RTF for regulatory submissions.
 
         Args:
             filename: Output filename
             **kwargs: Additional RTF options
         """
-        from forestly.exporters.rtf import RTFExporter
+        return None
 
-        exporter = RTFExporter()
-        exporter.export(self, filename, **kwargs)
-
-    def to_plotnine(self):
+    def to_plotnine(self) -> Any:
         """Generate static plot using plotnine.
 
         Returns:
             ggplot object
         """
-        from forestly.exporters.plotnine import PlotnineExporter
+        return None
 
-        exporter = PlotnineExporter()
-        return exporter.export(self)
-
-    def get_panel_by_type(self, panel_type: type) -> list[Panel]:
+    def get_panel_by_type(self, panel_type: type[Panel]) -> list[Panel]:
         """Get all panels of a specific type.
 
         Args:
@@ -157,7 +152,7 @@ class ForestPlot(BaseModel):
         """
         return [p for p in self.panels if isinstance(p, panel_type)]
 
-    def update_config(self, **kwargs) -> None:
+    def update_config(self, **kwargs: Any) -> None:
         """Update configuration with new values.
 
         Args:

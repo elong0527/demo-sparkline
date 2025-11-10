@@ -105,7 +105,9 @@ class SparklinePanel(Panel):
 
     def render(
         self, data: pl.DataFrame
-    ) -> dict[str, str | list[str] | int | list[int] | pl.DataFrame | None]:
+    ) -> dict[
+        str, str | list[str] | int | list[int] | pl.DataFrame | float | tuple[float, float] | None
+    ]:
         """Render panel data for display.
 
         Args:
@@ -216,7 +218,10 @@ class SparklinePanel(Panel):
 
         js_text = ", ".join([f'"{label}"' for label in labels])
 
-        js_x_range = f"{self.xlim[0]}, {self.xlim[1]}" if self.xlim else "null, null"
+        if self.xlim is not None:
+            js_x_range = f"{self.xlim[0]}, {self.xlim[1]}"  # pyre-ignore[16]: xlim is checked for None above
+        else:
+            js_x_range = "null, null"
 
         js_vline = self._prepare_reference_line(type)
 

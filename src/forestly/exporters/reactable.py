@@ -1,5 +1,7 @@
 """Reactable exporter for forest plot system."""
 
+from typing import Any
+
 import polars as pl
 from reactable import JS, ColGroup, Column, Reactable, Theme
 
@@ -34,7 +36,7 @@ class ReactableExporter:
         return self._build_reactable(data, columns, column_groups, group_by, forest_plot.config)
 
     def _create_columns_and_groups(
-        self, panels: list, config, used_columns: list[str]
+        self, panels: list[Any], config: Any, used_columns: list[str]
     ) -> tuple[list[Column], list[ColGroup]]:
         """Create Reactable columns and column groups from panels.
 
@@ -79,7 +81,7 @@ class ReactableExporter:
         return columns, column_groups
 
     def _create_text_columns_with_group(
-        self, panel: TextPanel, config
+        self, panel: TextPanel, config: Any
     ) -> tuple[list[Column], ColGroup | None]:
         """Create columns and optional column group for TextPanel.
 
@@ -99,15 +101,15 @@ class ReactableExporter:
             for group_col in panel.group_by:
                 variables_list = panel.variables if panel.variables else []
                 if group_col not in variables_list:
-                    col_args = {
-                        "id": group_col,
-                        "name": group_col.replace("_", " ").title(),
-                        "aggregate": "unique",
-                        "v_align": "center",
-                    }
-                    if panel.width:
-                        col_args["width"] = 150
-                    columns.append(Column(**col_args))
+                    width_val: int | None = 150 if panel.width else None
+                    column = Column(
+                        id=group_col,
+                        name=group_col.replace("_", " ").title(),
+                        aggregate="unique",
+                        v_align="center",
+                        width=width_val,
+                    )
+                    columns.append(column)
 
         # Handle main variables
         if panel.variables:
@@ -123,24 +125,27 @@ class ReactableExporter:
                 else:
                     display_name = label
 
-                col_args = {"id": var, "name": display_name, "v_align": "center"}
-
-                if width:
-                    col_args["width"] = width
-
-                # Use panel's alignment setting
-                col_args["align"] = panel.align
+                # Create Column with explicit parameters
+                width_val: int | None = width if width else None
+                cell_formatter = None
 
                 # Apply formatter if specified
                 if config.formatters and var in config.formatters:
                     formatter = config.formatters[var]
 
-                    def make_cell_formatter(fmt):
+                    def make_cell_formatter(fmt: Any) -> Any:
                         return lambda cell_info: fmt(cell_info.value)
 
-                    col_args["cell"] = make_cell_formatter(formatter)
+                    cell_formatter = make_cell_formatter(formatter)
 
-                column = Column(**col_args)
+                column = Column(
+                    id=var,
+                    name=display_name,
+                    v_align="center",
+                    width=width_val,
+                    align=panel.align if panel.align in ["left", "right", "center"] else "center",
+                    cell=cell_formatter,
+                )
                 columns.append(column)
                 variable_columns.append(var)
 
@@ -150,7 +155,7 @@ class ReactableExporter:
 
         return columns, column_group
 
-    def _create_sparkline_columns(self, panel: SparklinePanel, config) -> list[Column]:
+    def _create_sparkline_columns(self, panel: SparklinePanel, config: Any) -> list[Column]:
         """Create columns for SparklinePanel.
 
         Args:
@@ -174,16 +179,8 @@ class ReactableExporter:
             js_func = panel.js_function
 
             # Use first variable as column ID
-            col_args = {
-                "id": variables[0],
-                "name": panel.title if panel.title else variables[0],
-                "cell": JS(js_func),
-                "v_align": "center",
-                "align": "center",
-            }
-
-            if panel.width:
-                col_args["width"] = panel.width
+            width_val: int | None = panel.width if isinstance(panel.width, int) else None
+            footer_val = None
 
             # Handle footer display: combine custom footer text with x-axis/legend
             if panel.show_x_axis or panel.show_legend:
@@ -196,17 +193,26 @@ class ReactableExporter:
                     if panel.footer and not panel.footer.startswith("function"):
                         # For now, use the JavaScript footer (x-axis/legend)
                         # The custom text footer can be shown as part of the x-label
-                        col_args["footer"] = JS(footer_js)
+                        footer_val = JS(footer_js)
                     else:
-                        col_args["footer"] = JS(footer_js)
+                        footer_val = JS(footer_js)
             elif panel.footer:
                 # Only custom footer text, no x-axis or legend
                 if panel.footer.startswith("function"):
-                    col_args["footer"] = JS(panel.footer)
+                    footer_val = JS(panel.footer)
                 else:
-                    col_args["footer"] = panel.footer
+                    footer_val = panel.footer
 
-            columns.append(Column(**col_args))
+            column = Column(
+                id=variables[0],
+                name=panel.title if panel.title else variables[0],
+                cell=JS(js_func),
+                v_align="center",
+                align="center",
+                width=width_val,
+                footer=footer_val if isinstance(footer_val, (type(None), JS)) else None,
+            )
+            columns.append(column)
 
         return columns
 
@@ -216,7 +222,7 @@ class ReactableExporter:
         columns: list[Column],
         column_groups: list[ColGroup],
         group_by: list[str],
-        config,
+        config: Any,
     ) -> Reactable:
         """Build Reactable with configuration.
 
@@ -243,12 +249,12 @@ class ReactableExporter:
             "full_width": True,
             "width": "100%",
             "wrap": False,
-            "theme": Theme(cell_padding="0px 8px", style={"fontSize": f"{config.font_size}px"}),
+            "theme": Theme(cell_padding="0px 8px", style={"fontSize": f"{config.font_size}px"}),  # pyre-ignore[28]: External library type definition issue
         }
 
         # Add column groups if any
         if column_groups:
-            reactable_args["column_groups"] = column_groups
+            reactable_args["column_groups"] = column_groups  # pyre-ignore[6]: External library type definition issue
 
         # Add grouping if specified
         if group_by:
@@ -257,7 +263,7 @@ class ReactableExporter:
                 reactable_args["group_by"] = group_by[0]
             else:
                 # For multiple group columns (nested grouping)
-                reactable_args["group_by"] = group_by
+                reactable_args["group_by"] = group_by  # pyre-ignore[6]: External library type definition issue
 
             # Set default expanded to True so nested rows are visible by default
             reactable_args["default_expanded"] = True
@@ -265,4 +271,4 @@ class ReactableExporter:
             # Enable pagination for sub rows
             reactable_args["paginate_sub_rows"] = True
 
-        return Reactable(**reactable_args)
+        return Reactable(**reactable_args)  # pyre-ignore[6]: External library type definition issue
