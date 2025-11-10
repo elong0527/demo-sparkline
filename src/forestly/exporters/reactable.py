@@ -26,12 +26,16 @@ class ReactableExporter:
         group_by = forest_plot.get_grouping_columns()
 
         # Create columns and column groups from panels
-        columns, column_groups = self._create_columns_and_groups(forest_plot.panels, forest_plot.config, forest_plot.get_used_columns())
+        columns, column_groups = self._create_columns_and_groups(
+            forest_plot.panels, forest_plot.config, forest_plot.get_used_columns()
+        )
 
         # Build and return Reactable
         return self._build_reactable(data, columns, column_groups, group_by, forest_plot.config)
 
-    def _create_columns_and_groups(self, panels: list, config, used_columns: list[str]) -> tuple[list[Column], list[ColGroup]]:
+    def _create_columns_and_groups(
+        self, panels: list, config, used_columns: list[str]
+    ) -> tuple[list[Column], list[ColGroup]]:
         """Create Reactable columns and column groups from panels.
 
         Args:
@@ -65,14 +69,18 @@ class ReactableExporter:
         # Add hidden columns for data that's not displayed but needed for sparklines
         for col_name in used_columns:
             if col_name not in display_columns:
-                columns.append(Column(
-                    id=col_name,
-                    show=False  # Hide this column
-                ))
+                columns.append(
+                    Column(
+                        id=col_name,
+                        show=False,  # Hide this column
+                    )
+                )
 
         return columns, column_groups
 
-    def _create_text_columns_with_group(self, panel: TextPanel, config) -> tuple[list[Column], ColGroup | None]:
+    def _create_text_columns_with_group(
+        self, panel: TextPanel, config
+    ) -> tuple[list[Column], ColGroup | None]:
         """Create columns and optional column group for TextPanel.
 
         Args:
@@ -95,7 +103,7 @@ class ReactableExporter:
                         "id": group_col,
                         "name": group_col.replace("_", " ").title(),
                         "aggregate": "unique",
-                        "v_align": "center"
+                        "v_align": "center",
                     }
                     if panel.width:
                         col_args["width"] = 150
@@ -115,11 +123,7 @@ class ReactableExporter:
                 else:
                     display_name = label
 
-                col_args = {
-                    "id": var,
-                    "name": display_name,
-                    "v_align": "center"
-                }
+                col_args = {"id": var, "name": display_name, "v_align": "center"}
 
                 if width:
                     col_args["width"] = width
@@ -130,8 +134,10 @@ class ReactableExporter:
                 # Apply formatter if specified
                 if config.formatters and var in config.formatters:
                     formatter = config.formatters[var]
+
                     def make_cell_formatter(fmt):
                         return lambda cell_info: fmt(cell_info.value)
+
                     col_args["cell"] = make_cell_formatter(formatter)
 
                 column = Column(**col_args)
@@ -140,10 +146,7 @@ class ReactableExporter:
 
             # Create column group if we have a title and multiple variables
             if panel.title and len(variables) > 1:
-                column_group = ColGroup(
-                    name=panel.title,
-                    columns=variable_columns
-                )
+                column_group = ColGroup(name=panel.title, columns=variable_columns)
 
         return columns, column_group
 
@@ -166,9 +169,7 @@ class ReactableExporter:
             if not panel.js_function:
                 # Use panel's generate_javascript method with type="cell" for main sparkline
                 panel.js_function = panel.generate_javascript(
-                    colors=config.colors,
-                    type="cell",
-                    font_size=config.font_size
+                    colors=config.colors, type="cell", font_size=config.font_size
                 )
             js_func = panel.js_function
 
@@ -178,7 +179,7 @@ class ReactableExporter:
                 "name": panel.title if panel.title else variables[0],
                 "cell": JS(js_func),
                 "v_align": "center",
-                "align": "center"
+                "align": "center",
             }
 
             if panel.width:
@@ -188,9 +189,7 @@ class ReactableExporter:
             if panel.show_x_axis or panel.show_legend:
                 # Generate footer JavaScript with x-axis and/or legend
                 footer_js = panel.generate_javascript(
-                    colors=config.colors,
-                    type="footer",
-                    font_size=config.font_size
+                    colors=config.colors, type="footer", font_size=config.font_size
                 )
                 if footer_js:
                     # If there's also a custom footer text, we'll need to combine them
@@ -211,8 +210,14 @@ class ReactableExporter:
 
         return columns
 
-    def _build_reactable(self, data: pl.DataFrame, columns: list[Column],
-                        column_groups: list[ColGroup], group_by: list[str], config) -> Reactable:
+    def _build_reactable(
+        self,
+        data: pl.DataFrame,
+        columns: list[Column],
+        column_groups: list[ColGroup],
+        group_by: list[str],
+        config,
+    ) -> Reactable:
         """Build Reactable with configuration.
 
         Args:
@@ -238,10 +243,7 @@ class ReactableExporter:
             "full_width": True,
             "width": "100%",
             "wrap": False,
-            "theme": Theme(
-                cell_padding="0px 8px",
-                style={"fontSize": f"{config.font_size}px"}
-            ),
+            "theme": Theme(cell_padding="0px 8px", style={"fontSize": f"{config.font_size}px"}),
         }
 
         # Add column groups if any

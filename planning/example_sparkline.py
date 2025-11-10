@@ -11,17 +11,10 @@ def create_minimal_example():
     """Create a minimal working example."""
 
     # Create simple data
-    data = pl.DataFrame({
-        'value': [5.1, 4.9, 4.7],
-        'error': [0.3, 0.2, 0.4]
-    })
+    data = pl.DataFrame({"value": [5.1, 4.9, 4.7], "error": [0.3, 0.2, 0.4]})
 
     # Generate sparkline with mostly default values
-    js_code = sparkline_point_js(
-        data,
-        x='value',
-        x_lower='error'
-    )
+    js_code = sparkline_point_js(data, x="value", x_lower="error")
 
     print(f"Generated {len(js_code)} characters of JavaScript")
 

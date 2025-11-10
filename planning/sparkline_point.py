@@ -31,7 +31,7 @@ def sparkline_point_js(
     legend_title: str = "",
     legend_position: float = 0,
     legend_type: str = "point",
-    margin: list[int] | None = None
+    margin: list[int] | None = None,
 ) -> str:
     """
     Generate JavaScript code for Plotly sparkline visualization.
@@ -141,12 +141,12 @@ def sparkline_point_js(
         color_str = color_name.strip()
 
         # Check if it's a hex color
-        if color_str.startswith('#'):
+        if color_str.startswith("#"):
             try:
                 # Remove the '#' and handle 3 or 6 digit hex
                 hex_str = color_str[1:]
                 if len(hex_str) == 3:
-                    hex_str = ''.join([c*2 for c in hex_str])
+                    hex_str = "".join([c * 2 for c in hex_str])
                 if len(hex_str) == 6:
                     r = int(hex_str[0:2], 16)
                     g = int(hex_str[2:4], 16)
@@ -156,7 +156,7 @@ def sparkline_point_js(
                 pass
 
         # Check if it's an rgb/rgba color
-        if color_str.lower().startswith('rgb'):
+        if color_str.lower().startswith("rgb"):
             # Already in the right format, just ensure quotes
             return f'"{color_str}"'
 
@@ -208,11 +208,7 @@ def sparkline_point_js(
     js_legend_position = str(legend_position)
 
     # Convert legend type
-    legend_type_map = {
-        "point": "markers",
-        "line": "lines",
-        "point+line": "markers+lines"
-    }
+    legend_type_map = {"point": "markers", "line": "lines", "point+line": "markers+lines"}
     js_legend_type = legend_type_map.get(legend_type, "markers")
 
     js_legend_label = ", ".join([f'"{label}"' for label in legend_label]) if legend_label else ""
@@ -281,7 +277,7 @@ def sparkline_point_js(
         js_legend_title=js_legend_title,
         js_legend_position=js_legend_position,
         js_legend_label=js_legend_label,
-        data_trace=data_trace
+        data_trace=data_trace,
     )
 
     return js_code

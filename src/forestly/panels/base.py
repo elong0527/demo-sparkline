@@ -17,7 +17,7 @@ class Panel(BaseModel, ABC):
     width: int | list[int] | None = Field(default=None, description="Width configuration")
     footer: str = Field(default="", description="Panel footer text")
 
-    @field_validator('labels', 'variables', mode='before')
+    @field_validator("labels", "variables", mode="before")
     @classmethod
     def normalize_to_list(cls, v: str | list[str]) -> list[str]:
         """Normalize all string/list fields to list format."""
@@ -26,7 +26,11 @@ class Panel(BaseModel, ABC):
         return v if v else []
 
     @abstractmethod
-    def render(self, data: pl.DataFrame) -> dict[str, str | list[str] | int | list[int] | pl.DataFrame | float | tuple[float, float] | None]:
+    def render(
+        self, data: pl.DataFrame
+    ) -> dict[
+        str, str | list[str] | int | list[int] | pl.DataFrame | float | tuple[float, float] | None
+    ]:
         """Render panel data for display.
 
         Args:
@@ -93,7 +97,9 @@ class Panel(BaseModel, ABC):
             result.extend([None] * (count - len(result)))
         return result[:count]
 
-    def get_color_list(self, colors: list[str] | None, count: int, default: str = "#4A90E2") -> list[str]:
+    def get_color_list(
+        self, colors: list[str] | None, count: int, default: str = "#4A90E2"
+    ) -> list[str]:
         """Get color list with fallback to default for missing colors.
 
         Args:

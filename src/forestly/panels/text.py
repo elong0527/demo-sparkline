@@ -10,9 +10,11 @@ class TextPanel(Panel):
     """Display one or more text/numeric columns."""
 
     group_by: list[str] = Field(default_factory=list, description="Columns to group by")
-    align: str = Field(default="center", description="Alignment for columns: 'left', 'center', or 'right'")
+    align: str = Field(
+        default="center", description="Alignment for columns: 'left', 'center', or 'right'"
+    )
 
-    @field_validator('group_by', 'labels', 'variables', mode='before')
+    @field_validator("group_by", "labels", "variables", mode="before")
     @classmethod
     def normalize_to_list(cls, v: str | list[str]) -> list[str]:
         """Normalize all string/list fields to list format."""
@@ -20,7 +22,7 @@ class TextPanel(Panel):
             return [v]
         return v if v else []
 
-    @field_validator('align')
+    @field_validator("align")
     @classmethod
     def validate_align(cls, v: str) -> str:
         """Validate alignment is one of allowed values."""
@@ -29,7 +31,11 @@ class TextPanel(Panel):
             raise ValueError(f"align must be one of {allowed}, got '{v}'")
         return v
 
-    def render(self, data: pl.DataFrame) -> dict[str, str | list[str] | int | list[int] | pl.DataFrame | float | tuple[float, float] | None]:
+    def render(
+        self, data: pl.DataFrame
+    ) -> dict[
+        str, str | list[str] | int | list[int] | pl.DataFrame | float | tuple[float, float] | None
+    ]:
         """Render panel data for display.
 
         Args:
@@ -38,7 +44,10 @@ class TextPanel(Panel):
         Returns:
             Rendered data dictionary
         """
-        result: dict[str, str | list[str] | int | list[int] | pl.DataFrame | float | tuple[float, float] | None] = {"data": data}
+        result: dict[
+            str,
+            str | list[str] | int | list[int] | pl.DataFrame | float | tuple[float, float] | None,
+        ] = {"data": data}
 
         if self.variables:
             result["columns"] = self.variables
