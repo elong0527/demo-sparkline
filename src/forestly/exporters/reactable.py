@@ -249,12 +249,16 @@ class ReactableExporter:
             "full_width": True,
             "width": "100%",
             "wrap": False,
-            "theme": Theme(cell_padding="0px 8px", style={"fontSize": f"{config.font_size}px"}),  # pyre-ignore[28]: External library type definition issue
+            "theme": Theme(
+                cell_padding="0px 8px", style={"fontSize": f"{config.font_size}px"}
+            ),  # pyre-ignore[28]: External library type definition issue
         }
 
         # Add column groups if any
         if column_groups:
-            reactable_args["column_groups"] = column_groups  # pyre-ignore[6]: External library type definition issue
+            reactable_args["column_groups"] = (
+                column_groups  # pyre-ignore[6]: External library type definition issue
+            )
 
         # Add grouping if specified
         if group_by:
@@ -263,7 +267,9 @@ class ReactableExporter:
                 reactable_args["group_by"] = group_by[0]
             else:
                 # For multiple group columns (nested grouping)
-                reactable_args["group_by"] = group_by  # pyre-ignore[6]: External library type definition issue
+                reactable_args["group_by"] = (
+                    group_by  # pyre-ignore[6]: External library type definition issue
+                )
 
             # Set default expanded to True so nested rows are visible by default
             reactable_args["default_expanded"] = True

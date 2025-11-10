@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from forestly.core.config import Config
 from forestly.panels.base import Panel
 
+
 class ForestPlot(BaseModel):
     """Main class for creating forest plots from clinical trial data."""
 

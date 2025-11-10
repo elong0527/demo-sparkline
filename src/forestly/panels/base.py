@@ -88,9 +88,13 @@ class Panel(BaseModel, ABC):
             List of width values or None values
         """
         if self.width is None:
-            return [None] * count  # pyre-ignore[7]: List[None] is compatible with List[Optional[int]]
+            return [
+                None
+            ] * count  # pyre-ignore[7]: List[None] is compatible with List[Optional[int]]
         if isinstance(self.width, int):
-            return [self.width] * count  # pyre-ignore[7]: List[int] is compatible with List[Optional[int]]
+            return [
+                self.width
+            ] * count  # pyre-ignore[7]: List[int] is compatible with List[Optional[int]]
         # Ensure list has correct length
         result: list[int | None] = list(self.width)
         if len(result) < count:

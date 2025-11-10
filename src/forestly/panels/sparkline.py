@@ -219,7 +219,9 @@ class SparklinePanel(Panel):
         js_text = ", ".join([f'"{label}"' for label in labels])
 
         if self.xlim is not None:
-            js_x_range = f"{self.xlim[0]}, {self.xlim[1]}"  # pyre-ignore[16]: xlim is checked for None above
+            js_x_range = (
+                f"{self.xlim[0]}, {self.xlim[1]}"  # pyre-ignore[16]: xlim is checked for None above
+            )
         else:
             js_x_range = "null, null"
 
