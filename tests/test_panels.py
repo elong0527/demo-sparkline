@@ -1,3 +1,4 @@
+# pyre-strict
 import unittest
 from typing import cast
 
