@@ -23,9 +23,6 @@
     },
     {
       "site-package": "IPython"
-    },
-    {
-      "site-package": "plotnine"
     }
   ],
   "strict": true,
