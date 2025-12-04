@@ -277,5 +277,5 @@ class ReactableExporter:
 
             # Enable pagination for sub rows
             reactable_args["paginate_sub_rows"] = True
-
-        return Reactable(**reactable_args)  # pyre-ignore[6]: External library type definition issue
+            # pyre-ignore[6]: External library type definition issue
+        return Reactable(**reactable_args)
