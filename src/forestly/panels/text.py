@@ -1,3 +1,4 @@
+# pyre-strict
 """Text panel module for forest plot system."""
 
 import polars as pl

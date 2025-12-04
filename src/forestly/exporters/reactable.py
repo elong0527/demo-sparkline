@@ -1,3 +1,4 @@
+# pyre-strict
 """Reactable exporter for forest plot system."""
 
 from typing import Any

@@ -1,3 +1,4 @@
+# pyre-strict
 """Forestly: Forest Plot System for Clinical Trials."""
 
 __version__ = "0.1.0"

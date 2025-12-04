@@ -1,3 +1,4 @@
+# pyre-strict
 """Sparkline panel module for forest plot system."""
 
 from pathlib import Path

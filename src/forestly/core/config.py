@@ -1,3 +1,4 @@
+# pyre-strict
 """Configuration module for forest plot system."""
 
 from collections.abc import Callable

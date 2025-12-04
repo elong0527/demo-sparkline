@@ -1,3 +1,4 @@
+# pyre-strict
 """Core ForestPlot class for forest plot system."""
 
 from typing import Any

@@ -1,3 +1,4 @@
+# pyre-strict
 from typing import Any
 
 import polars as pl

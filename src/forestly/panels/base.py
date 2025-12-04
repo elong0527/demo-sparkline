@@ -1,3 +1,4 @@
+# pyre-strict
 """Base panel module for forest plot system."""
 
 from abc import ABC, abstractmethod
