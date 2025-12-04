@@ -3,11 +3,13 @@
 
 from collections.abc import Callable
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Config(BaseModel):
     """Configuration for forest plot display and documentation."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     figure_width: float | None = None
     figure_height: float | None = None
@@ -22,8 +24,3 @@ class Config(BaseModel):
     title: str | None = None
     footnote: str | None = None
     source: str | None = None
-
-    class Config:
-        """Pydantic config."""
-
-        arbitrary_types_allowed = True
