@@ -1,5 +1,11 @@
 # Forestly
 
+[![Python Versions](https://img.shields.io/pypi/pyversions/forestly.svg)](https://pypi.org/project/forestly/)
+[![PyPI](https://img.shields.io/pypi/v/forestly)](https://pypi.org/project/forestly/)
+[![License](https://img.shields.io/github/license/elong0527/py-forestly)](https://github.com/elong0527/py-forestly/blob/main/LICENSE)
+[![CI Build](https://github.com/elong0527/py-forestly/actions/workflows/ci.yml/badge.svg)](https://github.com/elong0527/py-forestly/actions/workflows/ci.yml)
+[![Codecov](https://codecov.io/gh/elong0527/py-forestly/graph/badge.svg)](https://codecov.io/gh/elong0527/py-forestly)
+
 A production-ready forest plot system for clinical trials with interactive Reactable tables, supporting nested listings and drill-down capabilities.
 
 ## Installation
