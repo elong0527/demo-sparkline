@@ -1,11 +1,11 @@
 [project]
 name = "forestly"
-version = "0.1.0"
-description = "Forest Plot System for Clinical Trials"
+version = "0.1.1"
+description = "InteractiveForest Plot"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-keywords = ["forest-plot", "clinical-trials", "visualization", "polars", "reactable"]
+keywords = ["forest-plot", "clinical-trials", "visualization", "polars", "reactable", "plotly"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
